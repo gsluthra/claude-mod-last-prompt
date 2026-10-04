@@ -21,9 +21,10 @@ The band takes one row and does nothing else.
 3. Collapses runs of whitespace, so a pasted multi-line block still shows as a single line.
 4. Only records what you typed yourself. Background task notifications, scheduled triggers, messages from other sessions and other plugins all submit through the same `prompt.submit` event, so the hook checks where the submission came from and ignores the rest.
 5. Shows ` Last  waiting for your first prompt…` before you have typed anything, so you can tell the mod is loaded in a fresh session.
-6. Gives the row back when Claude Code needs it for a survey.
+6. Colours the ` Last ` chip by what the session is doing: terracotta while a turn is running, green once it has finished, and grey before you have typed anything. With a few tabs open, the chip colour tells you which session is waiting on you without reading the text.
+7. Gives the row back when Claude Code needs it for a survey.
 
-The two colours come from Claude Code theme keys rather than fixed hex values, so the band follows your light or dark theme.
+The colours come from Claude Code theme keys rather than fixed hex values, so the band follows your light or dark theme, and the colourblind-friendly themes get blue in place of green.
 
 ## Build it yourself instead
 

@@ -48,6 +48,10 @@ test('waits with a placeholder until the person has typed a prompt', async ($, o
     expect(body?.props.dimColor).toBe(true)
     expect(body?.props.color).toBeUndefined()
 
+    // Nothing has finished, so the chip does not claim anything has.
+    const chip = await ui.find({ type: 'Text', text: /Last/ })
+    expect(chip?.props.backgroundColor).toBe('inactive')
+
     // Nothing to expand yet.
     expect(await ui.find({ key: 'toggle' })).toBeUndefined()
 
@@ -198,7 +202,7 @@ test('draws a chip label and the prompt in theme colors', async ($, on) => {
 
     // Theme keys, not raw hex, so the band follows the user's light or dark theme.
     const chip = await ui.find({ type: 'Text', text: /Last/ })
-    expect(chip?.props.backgroundColor).toBe('claude')
+    expect(chip?.props.backgroundColor).toBe('success')
     expect(chip?.props.color).toBe('inverseText')
     expect(chip?.props.bold).toBe(true)
 
@@ -207,5 +211,31 @@ test('draws a chip label and the prompt in theme colors', async ($, on) => {
     expect(body?.props.dimColor).toBeUndefined()
 
     await ui.unmount()
+  }
+})
+
+test('the chip says whether the turn is still running', async ($, on) => {
+  engine(on)
+
+  await typed($, 'take your time')
+
+  for (const surface of SURFACES satisfies readonly RenderSurface[]) {
+    const working = await $.ui.mount({
+      ...BAND,
+      surface,
+      props: { ...BAND.props, isWorking: true },
+    })
+
+    const busy = await working.find({ type: 'Text', text: /Last/ })
+    expect(busy?.props.backgroundColor).toBe('claude')
+
+    await working.unmount()
+
+    const done = await $.ui.mount({ ...BAND, surface })
+
+    const idle = await done.find({ type: 'Text', text: /Last/ })
+    expect(idle?.props.backgroundColor).toBe('success')
+
+    await done.unmount()
   }
 })

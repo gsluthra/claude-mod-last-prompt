@@ -21,6 +21,14 @@ const ELLIPSIS = '…'
 // reads as the mod working rather than the mod missing.
 const WAITING = ' waiting for your first prompt…'
 
+// The chip says whether the turn is still running: the Claude colour while it
+// is, the theme's success colour once it is done. Grey before the first prompt,
+// because there is nothing finished to report yet. Theme keys, so the
+// daltonized themes get their own pair rather than a red/green one.
+const WORKING_BG = 'claude'
+const DONE_BG = 'success'
+const IDLE_BG = 'inactive'
+
 const flatten = (text: string) => text.replace(/\s+/g, ' ').trim()
 
 const clip = (text: string, room: number) =>
@@ -51,10 +59,16 @@ export const register: Register = on => {
     const open = await read($, isOpen)
     const { Box, Button, Text } = $.ui.resolve(e)
 
+    const chipBackground = e.props.isWorking
+      ? WORKING_BG
+      : text === null
+        ? IDLE_BG
+        : DONE_BG
+
     if (text === null) {
       return (
         <Box>
-          <Text backgroundColor="claude" color="inverseText" bold>
+          <Text backgroundColor={chipBackground} color="inverseText" bold>
             {LABEL}
           </Text>
           <Box key="prompt">
@@ -77,7 +91,7 @@ export const register: Register = on => {
 
     return (
       <Box>
-        <Text backgroundColor="claude" color="inverseText" bold>
+        <Text backgroundColor={chipBackground} color="inverseText" bold>
           {LABEL}
         </Text>
         <Box key="prompt">

@@ -39,9 +39,14 @@ Behaviour I want:
    rather than the mod missing.
 8. If the render event says there is a survey, return the event unhandled and
    let Claude Code have the row.
-9. Use theme colour keys for the chip and the text instead of hex values, so
-   the band follows my light and dark themes. Terracotta chip with inverse
-   text, and periwinkle for the prompt text.
+9. Colour the chip by what the session is doing, using the render event's
+   working flag: the Claude terracotta while a turn is running, the theme's
+   success colour once it has finished, and grey before I have typed anything,
+   since nothing has finished at that point.
+10. Use theme colour keys for the chip and the text instead of hex values, so
+   the band follows my light and dark themes, and so the colourblind-friendly
+   themes get their own pair. Inverse text on the chip, and periwinkle for the
+   prompt text.
 
 Declare the session state you keep in a types file and wire it up in the
 manifest, so `claude plugin validate` holds the code to it.
@@ -51,8 +56,9 @@ terminal and desktop surfaces. Cover: the placeholder before the first prompt,
 the placeholder going away after one, a second prompt replacing the first, a
 multi-line prompt folded onto one row, More expanding a long prompt and Less
 collapsing it again, a survey taking the row both before and after a prompt is
-typed, a prompt from a different origin leaving the band alone, and the chip
-and text using theme keys rather than hex.
+typed, a prompt from a different origin leaving the band alone, the chip and
+text using theme keys rather than hex, and the chip changing colour between a
+running turn and a finished one.
 
 Then run `claude plugin validate .` and `claude plugin test .`, fix anything
 that fails, and tell me how to load the mod for one session and for every
@@ -64,5 +70,5 @@ session on this machine.
 Say so in the same message. A few things worth changing:
 
 - The chip text. "Last" is short enough to leave the prompt room, but "You asked" or an icon works too.
-- The colours. Ask for a different theme key, for example teal (`planMode`) or purple (`skill`).
+- The colours. Ask for a different theme key, for example teal (`planMode`) or purple (`skill`), or for the chip to stay one colour whether or not a turn is running.
 - Where the row sits. `AbovePrompt` is the row above the prompt line. Ask about the other components if you want it somewhere else.
