@@ -33,16 +33,40 @@ const typed = ($: any, text: string) =>
 const bandText = async (ui: any) =>
   (await ui.find({ key: 'prompt' }))?.text
 
-test('draws nothing until the person has typed a prompt', async ($, on) => {
+test('waits with a placeholder until the person has typed a prompt', async ($, on) => {
   engine(on)
 
   for (const surface of SURFACES satisfies readonly RenderSurface[]) {
     const ui = await $.ui.mount({ ...BAND, surface })
 
-    expect(await ui.find({ key: 'prompt' })).toBeUndefined()
+    // An empty band reads as the mod missing, so it says it is waiting.
+    const waiting = await ui.find({ key: 'prompt' })
+    expect(waiting?.text).toContain('waiting for your first prompt')
+
+    // Dim, so it reads as a placeholder rather than something typed.
+    const body = await ui.find({ type: 'Text', text: /waiting/ })
+    expect(body?.props.dimColor).toBe(true)
+    expect(body?.props.color).toBeUndefined()
+
+    // Nothing to expand yet.
+    expect(await ui.find({ key: 'toggle' })).toBeUndefined()
 
     await ui.unmount()
   }
+})
+
+test('the placeholder gives way to the prompt once one is typed', async ($, on) => {
+  engine(on)
+
+  await typed($, 'the real thing')
+
+  const ui = await $.ui.mount({ ...BAND, surface: 'terminal' })
+  const text = await bandText(ui)
+
+  expect(text).toContain('the real thing')
+  expect(text).not.toContain('waiting')
+
+  await ui.unmount()
 })
 
 test('shows the prompt the person typed', async ($, on) => {
@@ -112,6 +136,20 @@ test('yields the band to a survey', async ($, on) => {
   engine(on)
 
   await typed($, 'something typed')
+
+  const ui = await $.ui.mount({
+    ...BAND,
+    surface: 'terminal',
+    props: { ...BAND.props, hasSurvey: true },
+  })
+
+  expect(await ui.find({ key: 'prompt' })).toBeUndefined()
+
+  await ui.unmount()
+})
+
+test('a survey takes the band even before the first prompt', async ($, on) => {
+  engine(on)
 
   const ui = await $.ui.mount({
     ...BAND,

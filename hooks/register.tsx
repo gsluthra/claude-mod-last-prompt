@@ -17,6 +17,10 @@ const TYPED = ['composer', 'bridge']
 const LABEL = ' Last '
 const ELLIPSIS = '…'
 
+// Shown until the first prompt of a session is typed, so that an empty band
+// reads as the mod working rather than the mod missing.
+const WAITING = ' waiting for your first prompt…'
+
 const flatten = (text: string) => text.replace(/\s+/g, ' ').trim()
 
 const clip = (text: string, room: number) =>
@@ -40,12 +44,27 @@ export const register: Register = on => {
   on('ui.render', { component: 'AbovePrompt' }, async ($, e, next) => {
     const text = await read($, lastPrompt)
 
-    if (e.props.hasSurvey || text === null) {
+    if (e.props.hasSurvey) {
       return next(e)
     }
 
     const open = await read($, isOpen)
     const { Box, Button, Text } = $.ui.resolve(e)
+
+    if (text === null) {
+      return (
+        <Box>
+          <Text backgroundColor="claude" color="inverseText" bold>
+            {LABEL}
+          </Text>
+          <Box key="prompt">
+            <Text dimColor wrap="truncate-end">
+              {WAITING}
+            </Text>
+          </Box>
+        </Box>
+      )
+    }
 
     // Leave room for the chip and the toggle on the same row.
     const oneRow = Math.max(8, e.props.bodyColumns - LABEL.length - 10)

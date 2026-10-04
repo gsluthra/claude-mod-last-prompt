@@ -20,7 +20,8 @@ The band is one row. It costs nothing to read and nothing to ignore.
 2. Truncates to one line. Long prompts get a **More** / **Less** toggle that expands over several rows.
 3. Folds multi-line prompts onto one line, so a pasted block does not take over the band.
 4. Shows only what **you** typed. Background task notifications, scheduled triggers, peer messages and other plugins all submit prompts through the same event; those are filtered out so they cannot overwrite yours.
-5. Yields the row when Claude Code needs it for a survey.
+5. Shows ` Last  waiting for your first prompt…` before you have typed anything, so a fresh session shows the mod is loaded rather than looking like nothing installed.
+6. Yields the row when Claude Code needs it for a survey.
 
 Colours come from Claude Code theme keys rather than fixed values, so the band follows your light or dark theme instead of looking right in one and wrong in the other.
 
@@ -50,7 +51,7 @@ claude --plugin-dir ~/Projects/claude-mod-last-prompt
 
 Separate several folders with `:` (`;` on Windows). This has to go in your user settings; Claude Code ignores `CLAUDE_CODE_PLUGIN_DIRS` set in a project's settings. Restart Claude Code afterwards.
 
-The band appears once you submit your first prompt in a session. Before that it has nothing to show, so it draws nothing.
+On a fresh session the band shows a dim placeholder until you submit your first prompt, then shows that prompt instead.
 
 ## Changing the colours
 
@@ -70,7 +71,7 @@ A test pins the current choice, so change [`hooks/band.test.tsx`](hooks/band.tes
 
 ```
 claude plugin validate .    # manifest, hooks and state contract
-claude plugin test .        # 8 tests
+claude plugin test .        # 10 tests
 ```
 
 The mod is three pieces:
