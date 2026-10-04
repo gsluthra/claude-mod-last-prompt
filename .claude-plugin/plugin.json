@@ -1,0 +1,16 @@
+{
+  "name": "last-prompt-band",
+  "version": "0.1.0",
+  "description": "Keeps the prompt you last typed on a row above the prompt line.",
+  "author": {
+    "name": "Gurpreet Luthra"
+  },
+  "types": "./types/index.d.ts",
+  "license": "MIT",
+  "keywords": [
+    "claude-code",
+    "mod",
+    "plugin",
+    "prompt"
+  ]
+}
