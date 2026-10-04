@@ -2,7 +2,7 @@
 
 A small [Claude Code](https://claude.com/claude-code) mod. It keeps the prompt you last typed on the row just above the prompt line, and leaves it there for as long as the turn runs.
 
-![The band above the Claude Code prompt, showing the last prompt typed](docs/band.png)
+![The band above the Claude Code prompt, showing the last prompt typed, with a terracotta chip while the turn runs and a green one once it has finished](docs/band.png)
 
 ## Why it helps
 
