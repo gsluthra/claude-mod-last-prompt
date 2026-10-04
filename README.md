@@ -34,7 +34,7 @@ The mod is small, so you do not have to take my copy of it. [`PROMPT.md`](PROMPT
 Clone it anywhere:
 
 ```
-git clone <your-remote> ~/Projects/claude-mod-last-prompt
+git clone git@github.com:gsluthra/claude-mod-last-prompt.git ~/Projects/claude-mod-last-prompt
 ```
 
 **For one session:**
